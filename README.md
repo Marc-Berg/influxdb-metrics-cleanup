@@ -42,7 +42,7 @@ You can customize the `MEASUREMENTS` array to include only the metrics you want 
 
 1. Download the script:
 ```bash
-wget https://raw.githubusercontent.com/Marc-Berg/influxdb-measurement-cleanup/main/delete_measurements.sh
+wget https://github.com/Marc-Berg/influxdb-metrics-cleanup/blob/main/delete_measurements.sh
 ```
 
 2. Make it executable:
