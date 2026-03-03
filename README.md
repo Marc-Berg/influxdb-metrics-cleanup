@@ -1,10 +1,12 @@
 # InfluxDB Measurement Cleanup Script
 
-A bash script to efficiently delete multiple measurements from an InfluxDB 2.x bucket.
+A bash script to delete multiple measurements from an InfluxDB 2.x bucket.
+
+**🇩🇪 Deutsche Version:** [README.de.md](README.de.md)
 
 ## Overview
 
-This script addresses the limitation that InfluxDB's `delete` command does not support wildcards or regex patterns in predicates. Instead of manually deleting each measurement one by one, this script automates the process by iterating through a predefined list of measurements.
+This script addresses the limitation that InfluxDB's `delete` command does not support wildcards or regex patterns. Instead of manually deleting each measurement one by one, this script automates the process by iterating through a predefined list of measurements.
 
 **Purpose:** Specifically designed to clean up internal InfluxDB metrics that are collected by the built-in scraper (Prometheus/Go runtime metrics, InfluxDB internal stats, storage metrics, task scheduler metrics, etc.). These measurements often accumulate over time and can consume significant storage space.
 
@@ -115,29 +117,6 @@ import "influxdata/influxdb/schema"
 schema.measurements(bucket: "YOUR_BUCKET")
 ```
 
-### Finding Scraper Metrics Specifically
-
-To find measurements that match common scraper patterns:
-
-```bash
-influx query 'import "influxdata/influxdb/schema"
-schema.measurements(bucket: "YOUR_BUCKET")
-  |> filter(fn: (r) => r._value =~ /^(go_|influxdb_|storage_|http_|task_|qc_|service_|boltdb_)/)' \
-  --org YOUR_ORG
-```
-
-## Background: Why This Script Exists
-
-InfluxDB's delete predicate syntax does **not support**:
-- ❌ Wildcards (`_measurement="go_*"`)
-- ❌ Regex operators (`_measurement=~/^go_/`)
-- ❌ OR operators
-
-As stated in the [InfluxDB documentation](https://docs.influxdata.com/influxdb/v2/reference/syntax/delete-predicate/):
-> Delete predicates do not support regular expressions.
-
-This means you must delete each measurement individually. This script automates that tedious process.
-
 ## Security Notice
 
 ⚠️ **Warning**: This script will **permanently delete data**. Always:
@@ -167,12 +146,3 @@ Contributions are welcome! Feel free to:
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details
-
-## Author
-
-Created to solve the common problem of cleaning up accumulated InfluxDB scraper metrics that consume storage space over time.
-
-## Acknowledgments
-
-- InfluxDB Community for discussions on this limitation
-- [Community thread](https://community.influxdata.com/t/how-to-delete-multiple-measurements/26839) that confirmed the regex limitation
